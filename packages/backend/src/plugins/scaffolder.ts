@@ -4,6 +4,7 @@ import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
 import { createBuiltinActions } from '@backstage/plugin-scaffolder-backend';
 import { ScmIntegrations } from '@backstage/integration';
+import { triggerJenkinsJobAction } from '@internal/plugin-jenkins-app-deploy-backend';
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -13,6 +14,7 @@ export default async function createPlugin(
   });
 
   const integrations = ScmIntegrations.fromConfig(env.config);
+
   const builtInActions = createBuiltinActions({
     integrations,
     catalogClient,
@@ -20,8 +22,12 @@ export default async function createPlugin(
     reader: env.reader,
   });
 
+  const actions = [...builtInActions, triggerJenkinsJobAction(env.config)];
+
+  console.log('ACTIONS: ', actions)
+
   return await createRouter({
-    ...builtInActions,
+    actions,
     // catalogClient: catalogClient,
     logger: env.logger,
     config: env.config,

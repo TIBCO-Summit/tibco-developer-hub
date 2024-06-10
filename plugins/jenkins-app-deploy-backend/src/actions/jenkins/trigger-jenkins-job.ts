@@ -154,6 +154,7 @@ export function triggerJenkinsJobAction(config: Config) {
         '-------------------------------------------------------------------------------------------',
       );
       ctx.logger.info('---Calling Jenkins URL...');
+      // ctx.logger.info(`---Jenkins Call URL: ${jenkinsCallURl}`);
       ctx.logger.info(
         '-------------------------------------------------------------------------------------------',
       );
